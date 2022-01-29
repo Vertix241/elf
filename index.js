@@ -9,9 +9,11 @@ app.get("/", (req, res) => {
   res.send("Bot is running");
 })
 
+var Jimp = require('jimp');
 const Discord = require("discord.js")
 const client = new Discord.Client({intents: ["GUILDS", "GUILD_MESSAGES"]});
 client.on("messageCreate", message => {
+  
   if (message.content.toLowerCase() === "gay people gay people gay people gay people") {
     message.channel.send("FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK")
   }
@@ -54,30 +56,23 @@ client.on("messageCreate", message => {
     .setAuthor(user.username)
     .setImage(user.avatarURL());
     message.reply({embeds:[avatarEmbed]});
+
 }
 })
 
-client.on('message', async message => {
-    if (message.content === 'test') {
-      const Canvas = require('canvas');
-      const text1 = 'balls';
-      const canvas = Canvas.createCanvas(2000, 1260);
-      const context = canvas.getContext('2d');
-      const background = await Canvas.loadImage('./images.png');
+client.on('messageCreate', async message => {
+  if (message.content.toLowerCase().startsWith('p!elf')) {
+    const Canvas = require('canvas')
+    const canvas = Canvas.createCanvas(1032, 847);
+    const context = canvas.getContext('2d');
+    const background = await Canvas.loadImage('./elf.png');
+    context.drawImage(background, 0, 0, canvas.width, canvas.height);
+    const argument = await Canvas.loadImage(message.attachments.first().url)
+    context.drawImage(argument, 625, 80, 294, 303);
+    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'red-cirlce.png');
 
-      context.drawImage(background, 0, 0, canvas.width, canvas.height);
-
-      context.strokeStyle = '10px #74037b';
-      context.font = '50px';
-      context.fillStyle = '#d6cec7';
-
-      context.fillText(text1, canvas.width / 3.8, canvas.height / 1.4);
-
-      const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'yt-test.jpeg');
-
-      message.channel.send({files: [attachment]});
-        
-    }
+    message.reply({files: [attachment]})
+  }
 });
 
 client.login(process.env.token);
